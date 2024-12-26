@@ -1,2 +1,2 @@
-# ping-ping
+# ping-pong
 ping-pong sample application
