@@ -1,2 +1,2 @@
 #! /bin/bash
-docker build -t ping-pong:latest . --no-cache
+docker build -t ping-pong-py:latest . --no-cache
