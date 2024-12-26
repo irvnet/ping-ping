@@ -1,0 +1,2 @@
+#! /bin/bash
+docker build -t ping-pong:latest . --no-cache
