@@ -27,10 +27,18 @@ def root(request: Request):
     logger.info(f"/ was accessed on {host_name}")
     return templates.TemplateResponse("index.html", {"request": request, "message": rtn_val})
 
+
 @app.get("/ping")
 def health():
-    logger.info("/ping - ping-pong is healthy")
+    logger.info("/ping - got pinged")
     return {"ping": "got pinged... "}
+
+
+@app.get("/pong")
+def health():
+    logger.info("/pong - got ponged")
+    return {"ping": "got pinged... "}
+
 
 @app.get("/health")
 def health():
