@@ -1,0 +1,21 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: ping-job 
+spec:
+  template:
+    spec:
+      containers:
+        - name: ping-client
+          image: curlimages/curl:latest  # Lightweight curl image
+          command: ["/bin/sh", "-c"]
+          args:
+            - |
+              for i in $(seq 1 5); do
+                echo "Calling ping... Attempt $i"
+                curl -s  http://ping-svc.default.svc.cluster.local:8000/health
+                sleep 2  # Pause between calls
+              done
+      restartPolicy: Never
+  backoffLimit: 4
+
