@@ -4,6 +4,7 @@ from fastapi.templating import Jinja2Templates
 from fastapi.responses import HTMLResponse
 import logging
 import sys
+import os
 
 # Configure logging
 logging.basicConfig(
@@ -21,8 +22,11 @@ templates = Jinja2Templates(directory="templates")
 
 @app.get("/", response_class=HTMLResponse)
 def root(request: Request):
-    logger.info("/ was accessed.")
-    return templates.TemplateResponse(request, "index.html", {"message": "The app is up and running!"})
+    host_name = os.getenv("HOSTNAME", "unknown")
+    rtn_val = f"ping-pong is running from pod: {host_name}"
+    logger.info(f"/ was accessed on {host_name}")
+    return templates.TemplateResponse("index.html", {"request": request, "message": rtn_val})
+
 
 @app.get("/health")
 def health():
