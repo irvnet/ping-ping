@@ -1,0 +1,25 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: ping-ingress
+  namespace: default
+spec:
+  ingressClassName: nginx  
+  rules:
+  - host: ping-pong.local
+    http:
+      paths:
+      - path: /health
+        pathType: Prefix
+        backend:
+          service:
+            name: ping-svc
+            port:
+              number: 8000
+      - path: /ping
+        pathType: Prefix
+        backend:
+          service:
+            name: ping-svc
+            port:
+              number: 8000
