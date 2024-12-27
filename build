@@ -1,2 +1,4 @@
 #! /bin/bash
 docker build -t ping-pong-py:latest . --no-cache
+docker tag ping-pong-py:latest docker.io/irvnet/ping-pong-py:latest
+docker push docker.io/irvnet/ping-pong-py:latest 
