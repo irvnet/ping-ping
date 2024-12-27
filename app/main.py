@@ -5,6 +5,7 @@ from fastapi.responses import HTMLResponse
 import logging
 import sys
 import os
+import httpx
 
 # Configure logging
 logging.basicConfig(
@@ -37,7 +38,53 @@ def health():
 @app.get("/pong")
 def health():
     logger.info("/pong - got ponged")
-    return {"ping": "got pinged... "}
+    return {"pong": "got ponged... "}
+
+@app.get("/dpong")
+def discover_and_pong():
+    pong_service_url = "http://pong-svc.default.svc.cluster.local:8000/health"
+    try:
+        logger.info(f"Hitting pong @ {pong_service_url}")
+        with httpx.Client() as client:
+            response = client.get(pong_service_url)
+        logger.info(f"Response from pong: {response.json()}")
+        return {"message": "Ping request sent to pong", "pong_response": response.json()}
+    except httpx.RequestError as e:
+        logger.error(f"Failed to contact pong: {e}")
+        return {"error": "Failed to contact pong", "details": str(e)}
+
+
+@app.get("/dynamic-pongs")
+def discover_and_ping_all():
+    from kubernetes import client, config
+    try:
+        # Load Kubernetes configuration (works in-cluster)
+        config.load_incluster_config()
+        v1 = client.CoreV1Api()
+
+        # Find all pods with the label app=ping-pong and identity=pong
+        pods = v1.list_namespaced_pod(
+            namespace="default", label_selector="app=pong"
+        )
+
+        results = []
+        with httpx.Client() as client:
+            for pod in pods.items:
+                pod_ip = pod.status.pod_ip
+                if pod_ip:
+                    pong_url = f"http://{pod_ip}:8000/pong"
+                    try:
+                        response = client.get(pong_url)
+                        logger.info(f"ponged pod at {pod_ip}, Response: {response.json()}")
+                        results.append({"pod_ip": pod_ip, "says: ": response.json()})
+                    except httpx.RequestError as e:
+                        logger.error(f"Failed to ping pong at {pod_ip}: {e}")
+                        results.append({"pod_ip": pod_ip, "error": str(e)})
+        return {"message": "Pinged all pongs", "results": results}
+
+    except Exception as e:
+        logger.error(f"Error discovering and pinging pongs: {e}")
+        return {"error": "Failed to discover pongs", "details": str(e)}
 
 
 @app.get("/health")
