@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: pong
+  labels:
+    app: pong
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: pong 
+  template:
+    metadata:
+      labels:
+        app: pong 
+    spec:
+      containers:
+      - name: ping-pong
+        image: docker.io/irvnet/ping-pong-py:latest
+        ports:
+        - containerPort: 8000
