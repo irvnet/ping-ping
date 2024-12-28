@@ -9,7 +9,7 @@ spec:
   - host: ping-pong.local
     http:
       paths:
-      - path: /health
+      - path: /healthz
         pathType: Prefix
         backend:
           service:

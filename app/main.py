@@ -42,7 +42,7 @@ def pong():
 
 @app.get("/dpong")
 def discover_and_pong():
-    pong_service_url = "http://pong-svc.default.svc.cluster.local:8000/health"
+    pong_service_url = "http://pong-svc.default.svc.cluster.local:8000/healthz"
     try:
         logger.info(f"Hitting pong @ {pong_service_url}")
         with httpx.Client() as client:
@@ -87,8 +87,8 @@ def discover_and_ping_all():
         return {"error": "Failed to discover pongs", "details": str(e)}
 
 
-@app.get("/health")
-def health():
-    logger.info("/health - ping-pong is healthy")
+@app.get("/healthz")
+def healthz():
+    logger.info("/healthz - ping-pong is healthy")
     return {"message": "Ping-Pong is Healthy"}
 

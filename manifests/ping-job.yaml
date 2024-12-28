@@ -13,7 +13,7 @@ spec:
             - |
               for i in $(seq 1 5); do
                 echo "Calling ping... Attempt $i"
-                curl -s  http://ping-svc.default.svc.cluster.local:8000/health
+                curl -s  http://ping-svc.default.svc.cluster.local:8000/healthz
                 sleep 2  # Pause between calls
               done
       restartPolicy: Never
