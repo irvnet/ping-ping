@@ -30,13 +30,13 @@ def root(request: Request):
 
 
 @app.get("/ping")
-def health():
+def ping():
     logger.info("/ping - got pinged")
     return {"ping": "got pinged... "}
 
 
 @app.get("/pong")
-def health():
+def pong():
     logger.info("/pong - got ponged")
     return {"pong": "got ponged... "}
 
