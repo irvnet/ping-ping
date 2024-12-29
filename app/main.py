@@ -42,13 +42,13 @@ def pong():
 
 @app.get("/dpong")
 def discover_and_pong():
-    pong_service_url = "http://pong-svc.default.svc.cluster.local:8000/healthz"
+    pong_service_url = "http://pong-svc.default.svc.cluster.local:8000/ping"
     try:
-        logger.info(f"Hitting pong @ {pong_service_url}")
+        logger.info(f"hitting /ping on pong-deployment @ {pong_service_url}")
         with httpx.Client() as client:
             response = client.get(pong_service_url)
-        logger.info(f"Response from pong: {response.json()}")
-        return {"message": "Ping request sent to pong", "pong_response": response.json()}
+        logger.info(f"pong response: {response.json()}")
+        return {"message": "/ping sent to pong-deployment", "pong_response": response.json()}
     except httpx.RequestError as e:
         logger.error(f"Failed to contact pong: {e}")
         return {"error": "Failed to contact pong", "details": str(e)}
