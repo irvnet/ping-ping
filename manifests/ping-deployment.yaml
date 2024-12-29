@@ -17,7 +17,7 @@ spec:
       serviceAccountName: ping-sa 
       containers:
       - name: ping-pong
-        image: docker.io/irvnet/ping-pong-py:latest
+        image: ghcr.io/irvnet/ping-pong-py:latest
         ports:
         - containerPort: 8000
         livenessProbe:

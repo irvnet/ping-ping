@@ -1,4 +1,19 @@
 #! /bin/bash
-docker build -t ping-pong-py:latest . --no-cache
-docker tag ping-pong-py:latest docker.io/irvnet/ping-pong-py:latest
-docker push docker.io/irvnet/ping-pong-py:latest 
+
+# Define image name and tags
+IMAGE_NAME="ghcr.io/irvnet/ping-pong-py"
+TAG_VERSION="v1.0.0"
+TAG_LATEST="latest"
+
+# Build the Docker image
+docker build -t ${IMAGE_NAME}:${TAG_VERSION} . --no-cache
+
+# Tag the image as 'latest'
+docker tag ${IMAGE_NAME}:${TAG_VERSION} ${IMAGE_NAME}:${TAG_LATEST}
+
+# Push both tags
+docker push ${IMAGE_NAME}:${TAG_VERSION}
+docker push ${IMAGE_NAME}:${TAG_LATEST}
+
+echo "image pushed with tags: ${TAG_VERSION} and ${TAG_LATEST}"
+
