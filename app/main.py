@@ -89,6 +89,8 @@ def discover_and_ping_all():
 
 @app.get("/healthz")
 def healthz():
-    logger.info("/healthz - ping-pong is healthy")
-    return {"message": "Ping-Pong is Healthy"}
+    host_name = os.getenv("HOSTNAME", "unknown")
+    rtn_val = f"ping on: {host_name} is healthy"
+    logger.info(rtn_val)
+    return {"message": {rtn_val}}
 
